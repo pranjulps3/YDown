@@ -31,12 +31,11 @@ def playl(url,qual,loc):
         k=k+1
 
     t=0
-
     for i in bs.find_all('td',{'class':'pl-video-title'}):
         t=t+1
         os.system('cls')
         print("downloading...\n",end='\n'),
-        print(int((t/k)*100),"%",end='\n')
+        print(int(((t-1)/k)*100),"%",end='\n')
         for b in range(0,50):
             if b<((t/k)*50):
                 print("#",end=''),
@@ -77,17 +76,39 @@ def search():
     print("Which Video??\n>>", end='')
     t=input()
     k=0
+    print("Enter Quality\n1.LOW\n2.AVERAGE\n3.HIGH\n>>", end='')
+    k=input()
+    k=int(k)
+    if k is 1:
+        qual=0
+    elif k is 2:
+        qual=-2
+    else:
+        qual=-1
+    print("Enter the Location to save video(s)\n1. Tutorials\n2. Video Songs\n3. Give Location Manually\n>>", end='')
+    k=input()
+    k=int(k)
+    if k is 1:
+        loc='F:\Turtorials'
+    elif k is 2:
+        loc='F:\Video Songs'
+    else:
+        print("Enter Location\n>>", end='')
+        loc=input()
+    k=0
     for i in bs.find_all('h3',{'class':'yt-lockup-title '}):
         k=k+1
         if k>int(t):
+            print("Error")
             break
         for j in i.find_all('a'):
             try:
                 arr=j.get('href')
             except:
                 print("error parsing link")
-    
-    down(arr)
+    print("downloading....Please wait")
+    down(arr,qual,loc)
+    print("Successfully Downloaded!!")
 
 
 def main():
@@ -120,7 +141,10 @@ def main():
         k=input()
         k=int(k)
         if k is 1:
-            loc='F:\Turtorials'
+            print("\nEnter new folder's name\n>>", end='')
+            l=input()
+            loc='F:\Turtorials\%s'%l
+            os.system('mkdir %s'%loc)
         elif k is 2:
             loc='F:\Video Songs'
         else:
@@ -147,7 +171,10 @@ def main():
         k=input()
         k=int(k)
         if k is 1:
-            loc='F:\Turtorials'
+            print("\nEnter new folder's name\n>>", end='')
+            l=input()
+            loc='F:\Turtorials\%s'%l
+            os.system('mkdir %s'%loc)
         elif k is 2:
             loc='F:\Video Songs'
         else:
