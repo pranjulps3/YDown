@@ -31,12 +31,11 @@ def playl(url,qual,loc):
         k=k+1
 
     t=0
-
     for i in bs.find_all('td',{'class':'pl-video-title'}):
         t=t+1
         os.system('cls')
         print("downloading...\n",end='\n'),
-        print(int((t/k)*100),"%",end='\n')
+        print(int(((t-1)/k)*100),"%",end='\n')
         for b in range(0,50):
             if b<((t/k)*50):
                 print("#",end=''),
@@ -56,47 +55,69 @@ def playl(url,qual,loc):
     print("Successfully Downloaded!")
 
 def search():
-    srch=input("search query(please use '+' instead of space)\n>>")
-    print("Please be patient. This could take 10 to 20 seconds depending upon your internet connection.....")
+    srch=input("|| Search Query(please use '+' instead of space)\n|| >>")
+    print("|| Please be patient. This could take 10 to 20 seconds depending upon your internet connection.....")
     try:
         r=requests.get("https://www.youtube.com/results?search_query=%s"%srch)
         code=r.text
         k=0
         bs=BeautifulSoup(code,'lxml')
     except:
-        print("\nNetwork or Input error :/")
+        print("\n|| Network or Input error :/")
         main()
     os.popen('cls')
     for i in bs.find_all('h3',{'class':'yt-lockup-title '}):
         k=k+1
         for j in i.find_all('a'):
             try:
-                print(k,". "+j.string)
+                print("|| ",k,". "+j.string)
             except:
                 k=k
-    print("Which Video??\n>>", end='')
+    print("|| Which Video??\n|| >>", end='')
     t=input()
+    k=0
+    print("|| Enter Quality\n|| 1.LOW\n|| 2.AVERAGE\n|| 3.HIGH\n|| >>", end='')
+    k=input()
+    k=int(k)
+    if k is 1:
+        qual=0
+    elif k is 2:
+        qual=-2
+    else:
+        qual=-1
+    print("|| Enter the Location to save video(s)\n|| 1. Tutorials\n|| 2. Video Songs\n|| 3. Give Location Manually\n|| >>", end='')
+    k=input()
+    k=int(k)
+    if k is 1:
+        loc='F:\Turtorials'
+    elif k is 2:
+        loc='F:\Video Songs'
+    else:
+        print("|| Enter Location\n|| >>", end='')
+        loc=input()
     k=0
     for i in bs.find_all('h3',{'class':'yt-lockup-title '}):
         k=k+1
         if k>int(t):
+            print("Error")
             break
         for j in i.find_all('a'):
             try:
                 arr=j.get('href')
             except:
-                print("error parsing link")
-    
-    down(arr)
+                print("|| error parsing link")
+    print("|| downloading....Please wait")
+    down(arr,qual,loc)
+    print("|| Successfully Downloaded!!")
 
 
 def main():
     #print("Use default proxy(172.27.16.154)(y/n)\n>>",end='\n')
     #if input() is 'y':
-        #os.system('set http_proxy=http://rakeshme:roopak1827@172.27.16.154:3128')
+    os.system('set http_proxy=http://rakeshme:roopak1827@172.27.16.154:3128')
     os.system('cls')
-    print("||      Ydown- The Ultimate Youtube Downloader\n||Made By: Pranjul Shukla\n\nYou Know the drill. Do as you are asked to. As simple as that....\n")
-    print("1. Search for Video to Download\n2. Download a Video via link\n3. Download a whole f*ckin Playlist\n>>"),
+    print("||      Ydown- The Ultimate Youtube Downloader\n||Made By: Pranjul Shukla\n|| \n|| You Know the drill. Do as you are asked to. As simple as that....\n||")
+    print("|| 1. Search for Video to Download\n|| 2. Download a Video via link\n|| 3. Download a whole f*ckin Playlist\n|| 4. View Source Code\n|| 5. Exit\n|| >>",end=''),
     k=input()
     k=int(k)
     if k is 1:
@@ -104,10 +125,10 @@ def main():
         search()
     elif k is 2:
         os.system('cls')
-        print("Enter Link\n>>", end='')
+        print("|| Enter Link\n>>", end='')
         url=input()
         k=3
-        print("Enter Quality\n1.LOW\n2.AVERAGE\n3.HEIGH\n>>", end='')
+        print("|| Enter Quality\n|| 1.LOW\n|| 2.AVERAGE\n|| 3.HEIGH\n|| >>", end='')
         k=input()
         k=int(k)
         if k is 1:
@@ -116,25 +137,33 @@ def main():
             qual=-2
         else:
             qual=-1
-        print("Enter the Location to save video(s)\n1. Tutorials\n2. Video Songs\n3. Give Location Manually\n>>", end='')
+        print("|| Enter the Location to save video(s)\n|| 1. Tutorials\n|| 2. Video Songs\n|| 3. Give Location Manually\n|| >>", end='')
         k=input()
         k=int(k)
         if k is 1:
-            loc='F:\Turtorials'
+            print("\n|| Enter new folder's name\n|| >>", end='')
+            l=input()
+            loc='F:\Turtorials\%s'%l
+            os.system('mkdir %s'%loc)
         elif k is 2:
             loc='F:\Video Songs'
         else:
-            print("Enter Location\n>>", end='')
+            print("|| Enter Location\n>>", end='')
             loc=input()
         os.system('cls')
         down(url,qual,loc)
-        print("Successfully Downloaded!!!")
+        print("|| Successfully Downloaded!!!")
+    elif k is 4:
+        os.system('notepad d:\Ydown\Ydown.py')
+        main()
+    elif k is 5:
+        exit()
     else:
         os.system('cls')
-        print("Enter Link to the playlist page\n>>", end='')
+        print("|| Enter Link to the playlist page\n|| >>", end='')
         url=input()
         k=3
-        print("Enter Quality\n1.LOW\n2.AVERAGE\n3.HEIGH\n>>", end='')
+        print("|| Enter Quality\n|| 1.LOW\n|| 2.AVERAGE\n|| 3.HEIGH\n|| >>", end='')
         k=input()
         k=int(k)
         if k is 1:
@@ -143,15 +172,18 @@ def main():
             qual=-2
         else:
             qual=-1
-        print("Enter the Location to save video(s)\n1. Tutorials\n2. Video Songs\n3. Give Location Manually\n>>", end='')
+        print("|| Enter the Location to save video(s)\n|| 1. Tutorials\n|| 2. Video Songs\n|| 3. Give Location Manually\n|| >>", end='')
         k=input()
         k=int(k)
         if k is 1:
-            loc='F:\Turtorials'
+            print("\n|| Enter new folder's name\n|| >>", end='')
+            l=input()
+            loc='F:\Turtorials\%s'%l
+            os.system('mkdir %s'%loc)
         elif k is 2:
             loc='F:\Video Songs'
         else:
-            print("Enter Location\n>>", end='')
+            print("|| Enter Location\n|| >>", end='')
             loc=input()
         playl(url,qual,loc)
 
